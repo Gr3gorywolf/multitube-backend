@@ -1,21 +1,31 @@
 {
-    "private": true,
-    "scripts": {
-        "dev": "npm run development",
-        "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "watch": "npm run development -- --watch",
-        "watch-poll": "npm run watch -- --watch-poll",
-        "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --disable-host-check --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "prod": "npm run production",
-        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
-    },
-    "devDependencies": {
-        "axios": "^0.19",
-        "cross-env": "^7.0",
-        "laravel-mix": "^5.0.1",
-        "lodash": "^4.17.13",
-        "resolve-url-loader": "^3.1.0",
-        "sass": "^1.15.2",
-        "sass-loader": "^8.0.0"
-    }
+  "name": "multitube-backend",
+  "version": "1.0.0",
+  "description": "The backend of multitube",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gr3gorywolf/multitube-backend.git"
+  },
+  "keywords": [
+    "multitube",
+    "backend"
+  ],
+  "author": "GR3",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gr3gorywolf/multitube-backend/issues"
+  },
+  "homepage": "https://github.com/Gr3gorywolf/multitube-backend#readme",
+  "dependencies": {
+    "@types/express": "^4.17.7",
+    "@types/node": "^14.0.27",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "ytdl-core": "^3.2.0"
+  }
 }
