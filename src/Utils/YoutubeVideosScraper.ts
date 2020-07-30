@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio";
-import { YoutubeHomeResponse } from '../interfaces/YoutubeHomeResponse';
-import { YoutubeTrendsResponse } from '../interfaces/YoutubeTrendsResponse';
-import { SearchResult, Kind, Thumbnails } from '../interfaces/SearchResult';
+import { YoutubeHomeResponse } from '../Interfaces/YoutubeHomeResponse';
+import { YoutubeTrendsResponse } from '../Interfaces/YoutubeTrendsResponse';
+import { SearchResult, Kind, Thumbnails } from '../Interfaces/SearchResult';
 import { UrlHelper } from './UrlHelper';
 export class YoutubeVideosScraper {
 
