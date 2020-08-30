@@ -3,6 +3,7 @@ import { YoutubeHomeResponse } from '../Interfaces/YoutubeHomeResponse';
 import { YoutubeTrendsResponse } from '../Interfaces/YoutubeTrendsResponse';
 import { SearchResult, Kind, Thumbnails } from '../Interfaces/SearchResult';
 import { UrlHelper } from './UrlHelper';
+import { Suggestion } from "../Interfaces/Suggestion";
 export class YoutubeVideosScraper {
 
 
@@ -11,7 +12,6 @@ export class YoutubeVideosScraper {
   constructor(content: string) {
     this.HtmlContent = content;
     this.$ = cheerio.load(this.HtmlContent);
-
   }
 
 
@@ -33,6 +33,23 @@ export class YoutubeVideosScraper {
     return parsedData;
 
   }
+
+ scrapRelatedVideos():Array<Suggestion> {
+   var suggestions:Array<Suggestion> = [];
+   var extractedData  =  this.$('.compact-media-item-metadata-content').toArray();
+   console.log(extractedData)
+    for(let data of extractedData){
+      
+      let title = this.$('.compact-media-item-headline',data).text();
+      let link = `https://www.youtube.com/watch?v=${data.attribs['href']}` ;
+      suggestions.push({
+        Name:title,
+        Link: link,
+        Portrait:new UrlHelper().getThumbnailFromUrl(link)
+      })
+    } 
+    return suggestions;
+ }
 
   scrapYoutubeHomePage(): Array<SearchResult> {
 
@@ -68,7 +85,6 @@ export class YoutubeVideosScraper {
 
 
   scrapYoutubeTrendsPage(): Array<SearchResult> {
-
     var results: Array<SearchResult> = [];
     var parsedData: YoutubeTrendsResponse = this.extractVideosJson();
     console.log(parsedData);

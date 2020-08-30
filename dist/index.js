@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -19,9 +20,14 @@ const app = express_1.default();
 const PORT = process.env.PORT || 1025;
 require('dotenv').config();
 app.use(express_1.default.static('public'));
-app.get("/v1/videoinfo/:videoId", (req, res) => __awaiter(this, void 0, void 0, function* () {
+app.get("/v1/videoinfo/:videoId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let videoId = req.params.videoId;
-    let info = yield ytdl_core_1.default.getInfo(videoId);
+    let cookies = process.env.COOKIES ? process.env.COOKIES : "";
+    let info = yield ytdl_core_1.default.getInfo(videoId, {
+        requestOptions: {
+            cookie: cookies
+        }
+    });
     let responseInfo = {
         details: {
             thumbnail: `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`,
@@ -33,7 +39,7 @@ app.get("/v1/videoinfo/:videoId", (req, res) => __awaiter(this, void 0, void 0, 
     };
     res.json(responseInfo);
 }));
-app.get("/v1/trendvideos", (req, res) => __awaiter(this, void 0, void 0, function* () {
+app.get("/v1/trendvideos", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     axios_1.default.get('https://m.youtube.com/feed/trending')
         .then((axres) => {
         var scraper = new YoutubeVideosScraper_1.YoutubeVideosScraper(axres.data);
@@ -43,7 +49,17 @@ app.get("/v1/trendvideos", (req, res) => __awaiter(this, void 0, void 0, functio
         res.status(404);
     });
 }));
-app.get("/v1/homevideos", (req, res) => __awaiter(this, void 0, void 0, function* () {
+app.get("/v1/suggestions/:videoId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    axios_1.default.get(`https://m.youtube.com/watch?v=${req.params.videoId}`)
+        .then((axres) => {
+        var scraper = new YoutubeVideosScraper_1.YoutubeVideosScraper(axres.data);
+        var results = scraper.scrapRelatedVideos();
+        res.json(results);
+    }).catch((err) => {
+        res.status(404);
+    });
+}));
+app.get("/v1/homevideos", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     axios_1.default.get('https://m.youtube.com')
         .then((axres) => {
         var scraper = new YoutubeVideosScraper_1.YoutubeVideosScraper(axres.data);
