@@ -10,9 +10,11 @@ app.use(express.static('public'));
 app.get("/v1/videoinfo/:videoId",async (req,res)=>{
   let videoId = req.params.videoId;
   let cookies = process.env.COOKIES?process.env.COOKIES:"";
+  let idToken = process.env.ID_TOKEN?process.env.ID_TOKEN:"";
   let info = await ytdl.getInfo(videoId,{
     requestOptions:{
-      cookie:cookies
+      cookie:cookies,
+      'x-youtube-identity-token':idToken
     }
   });
   let responseInfo = {
